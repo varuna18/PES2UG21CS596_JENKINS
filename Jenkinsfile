@@ -1,29 +1,22 @@
 pipeline{
   agent any
   stages{
-  stages('Clone Repository'){
-    steps{
-      checkout([$class: 'GitSCM',
-      branches: [[name: '*/main']],
-      userRemoteConfigs: [[URL: 'https://github.com/varuna18/PES2UG21CS596_JENKINS.git']]])
-    }
-  }
-  state ('Build'){
+  stage('Build'){
     steps{
       build 'PES2UG21CS596-1'
-      sh 'g++ main.cpp -o output'
+      sh 'g++ working.cpp -o output'
+      echo 'Build Stage Successful'
     }
   }
-  stage ('Test'){
+  stage('Test'){
     steps{
       sh './output'
-      
+      echo 'Test Stage Successful'
     }
   }
-  stage ('Deploy'){
+  stage('Deploy'){
     steps {
-     
-      echo 'deploy'
+      echo 'Deployment Successful'
     }
   }
 }
@@ -32,6 +25,4 @@ post{
     echo 'Pipeline failed'
   }
 }
-                           }
-
-      
+}
