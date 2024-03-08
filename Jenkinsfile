@@ -1,27 +1,29 @@
 pipeline{
   agent any
   stages{
-  stages('Build'){
+  stages('Clone Repository'){
     steps{
-      sh 'mvn clean install'
-      echo 'Buils Stage Successful'
+      checkout([$class: 'GitSCM',
+      branches: [[name: '*/main']],
+      userRemoteConfigs: [[URL: 'https://github.com/varuna18/PES2UG21CS596_JENKINS.git']]])
+    }
+  }
+  state ('Build'){
+    steps{
+      build 'PES2UG21CS596-1'
+      sh 'g++ main.cpp -o output'
     }
   }
   stage ('Test'){
     steps{
-      sh 'mvn test'
-      echo 'Test Stage Successful'
-      post{
-        always{
-          junit 'target/surefire-reports/*.xml'
-        }
-      }
+      sh './output'
+      
     }
   }
   stage ('Deploy'){
     steps {
-      sh 'mvn deploy'
-      echo 'Deployment Successful'
+     
+      echo 'deploy'
     }
   }
 }
@@ -30,6 +32,6 @@ post{
     echo 'Pipeline failed'
   }
 }
-}
+                           }
 
       
